@@ -27,7 +27,7 @@ public class InventoryDBHelper extends SQLiteOpenHelper {
         // this string holds statement for creating the inventory_table
         String CREATE_TABLE_INVENTORY =
                 "CREATE TABLE " + InventoryContract.InventoryFeedEntry.TABLE_NAME_INVENTORY + "("
-                        + InventoryContract.InventoryFeedEntry._ID + " INTEGER PRIMARY KEY AUTO INCREMENT, "
+                        + InventoryContract.InventoryFeedEntry._ID + " INTEGER PRIMARY KEY, "
                         + InventoryContract.InventoryFeedEntry.COLUMN_PRODUCT_NAME + " TEXT NOT NULL, "
                         + InventoryContract.InventoryFeedEntry.COLUMN_PRICE + " INTEGER NOT NULL, "
                         + InventoryContract.InventoryFeedEntry.COLUMN_QUANTITIY + " INT NOT NULL, "
@@ -41,7 +41,7 @@ public class InventoryDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        
+
         // onUpgrade we delete the existing table and creates a new one
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + InventoryContract.InventoryFeedEntry.TABLE_NAME_INVENTORY);
         onCreate(sqLiteDatabase);
