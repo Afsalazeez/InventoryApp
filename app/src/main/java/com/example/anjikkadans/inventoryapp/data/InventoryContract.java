@@ -17,7 +17,7 @@ public class InventoryContract {
     // named 'inventory'
     public static final class InventoryFeedEntry implements BaseColumns {
 
-        public static final String TABLE_NAME_INVENTORY = "inventory";
+        public static final String TABLE_NAME_INVENTORY = "inventory_table";
 
         public static final String COLUMN_PRODUCT_NAME = "product_name";
         public static final String COLUMN_PRICE = "price";
