@@ -34,11 +34,6 @@ public class InventoryActivity extends AppCompatActivity {
         // initializes the inventoryDBHelper class
         inventoryDBHelper = new InventoryDBHelper(this);
 
-        // calling method which returns a cursor querying the inventory table
-        Cursor cursor = getData();
-
-        // Logs the number of rows returned to check if the function works as expected
-        Log.v(TAG_NAME, "Cursor returned from inventory table with " + cursor.getCount() + " rows ");
 
     }
 
