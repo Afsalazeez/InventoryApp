@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.anjikkadans.inventoryapp.data.InventoryContract;
 import com.example.anjikkadans.inventoryapp.data.InventoryDBHelper;
@@ -18,8 +19,12 @@ public class InventoryActivity extends AppCompatActivity {
 
     // declares the InventoryDBHelper class to access from
     private InventoryDBHelper inventoryDBHelper;
+
     // declares the SQLiteDatabase instance for the inventory database
     private SQLiteDatabase inventoryDatabase;
+
+    // tag name for messages through logs
+    private String TAG_NAME = InventoryActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +33,9 @@ public class InventoryActivity extends AppCompatActivity {
 
         // initializes the inventoryDBHelper class
         inventoryDBHelper = new InventoryDBHelper(this);
+
+        // calling the function for testing
+        insertDummyData();
 
     }
 
@@ -58,14 +66,18 @@ public class InventoryActivity extends AppCompatActivity {
         ContentValues contentValues = new ContentValues();
 
         // putting values to the corresponding columns
-        contentValues.put(InventoryContract.InventoryFeedEntry.TABLE_NAME_INVENTORY, productName);
+        contentValues.put(InventoryContract.InventoryFeedEntry.COLUMN_PRODUCT_NAME, productName);
         contentValues.put(InventoryContract.InventoryFeedEntry.COLUMN_PRICE, productPrice);
         contentValues.put(InventoryContract.InventoryFeedEntry.COLUMN_QUANTITIY, quantity);
         contentValues.put(InventoryContract.InventoryFeedEntry.COLUMN_SUPPLIER_NAME, supplierName);
         contentValues.put(InventoryContract.InventoryFeedEntry.COLUMN_SUPPLIER_PHONE_NUMBER, supplierPhoneNumber);
 
         // save the content values to the databse
-        inventoryDatabase.insert(InventoryContract.InventoryFeedEntry.TABLE_NAME_INVENTORY, null, contentValues);
+        long rowId = inventoryDatabase.insert(InventoryContract.InventoryFeedEntry.TABLE_NAME_INVENTORY,
+                null, contentValues);
+
+        Log.v(TAG_NAME, "Dummy data added to inventory table to row " + String.valueOf(rowId));
+
     }
 
     // this function queries data from the database
