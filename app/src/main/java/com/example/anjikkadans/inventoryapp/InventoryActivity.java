@@ -34,6 +34,13 @@ public class InventoryActivity extends AppCompatActivity {
         // initializes the inventoryDBHelper class
         inventoryDBHelper = new InventoryDBHelper(this);
 
+        // calling insertDummyData
+        insertDummyData();
+
+        // calling fetchData
+        Cursor resultCursor = getData();
+
+        Log.v(TAG_NAME, "Cursor returned with " + resultCursor.getCount() + " rows");
 
     }
 
