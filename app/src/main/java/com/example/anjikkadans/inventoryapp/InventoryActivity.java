@@ -24,7 +24,7 @@ public class InventoryActivity extends AppCompatActivity {
     private SQLiteDatabase inventoryDatabase;
 
     // tag name for messages through logs
-    private String TAG_NAME = InventoryActivity.class.getSimpleName();
+    private static final String TAG_NAME = InventoryActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +40,23 @@ public class InventoryActivity extends AppCompatActivity {
         // calling fetchData
         Cursor resultCursor = getData();
 
-        Log.v(TAG_NAME, "Cursor returned with " + resultCursor.getCount() + " rows");
+        // String builder for saving pet names
+        StringBuilder nameStringBuilder = new StringBuilder();
+
+        // column index of pet name in pets table
+        int nameColumnIndex = resultCursor.getColumnIndex(InventoryContract.InventoryFeedEntry.COLUMN_PRODUCT_NAME);
+
+        // iterate through all the returned rows
+        while (resultCursor.moveToNext()) {
+            // getting the name of the pet from the current row
+            String petName = resultCursor.getString(nameColumnIndex);
+
+            // appending the name with the nameStringBuilder
+            nameStringBuilder.append("\n" + petName);
+        }
+
+        // logging the pet names in the cursor returned
+        Log.v(TAG_NAME, "Cursor returned with " + nameStringBuilder.toString() + " rows");
 
     }
 

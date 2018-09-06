@@ -10,7 +10,7 @@ import android.provider.BaseColumns;
 public class InventoryContract {
 
     // constructor for the InventoryContract class
-    public InventoryContract() {
+    private InventoryContract() {
     }
 
     // class which holds table string value constants of table
