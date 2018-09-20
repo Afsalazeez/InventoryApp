@@ -30,7 +30,7 @@ public class InventoryDBHelper extends SQLiteOpenHelper {
                         + InventoryContract.InventoryFeedEntry._ID + " INTEGER PRIMARY KEY, "
                         + InventoryContract.InventoryFeedEntry.COLUMN_PRODUCT_NAME + " TEXT NOT NULL, "
                         + InventoryContract.InventoryFeedEntry.COLUMN_PRICE + " INTEGER NOT NULL, "
-                        + InventoryContract.InventoryFeedEntry.COLUMN_QUANTITIY + " INT NOT NULL, "
+                        + InventoryContract.InventoryFeedEntry.COLUMN_QUANTITY + " INT NOT NULL, "
                         + InventoryContract.InventoryFeedEntry.COLUMN_SUPPLIER_NAME + " TEXT , "
                         + InventoryContract.InventoryFeedEntry.COLUMN_SUPPLIER_PHONE_NUMBER + " TEXT "
                         + ");";

@@ -3,7 +3,6 @@ package com.example.anjikkadans.inventoryapp;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -89,7 +88,7 @@ public class InventoryActivity extends AppCompatActivity {
         // putting values to the corresponding columns
         contentValues.put(InventoryContract.InventoryFeedEntry.COLUMN_PRODUCT_NAME, productName);
         contentValues.put(InventoryContract.InventoryFeedEntry.COLUMN_PRICE, productPrice);
-        contentValues.put(InventoryContract.InventoryFeedEntry.COLUMN_QUANTITIY, quantity);
+        contentValues.put(InventoryContract.InventoryFeedEntry.COLUMN_QUANTITY, quantity);
         contentValues.put(InventoryContract.InventoryFeedEntry.COLUMN_SUPPLIER_NAME, supplierName);
         contentValues.put(InventoryContract.InventoryFeedEntry.COLUMN_SUPPLIER_PHONE_NUMBER, supplierPhoneNumber);
 
@@ -110,7 +109,7 @@ public class InventoryActivity extends AppCompatActivity {
 
         // below string array contains the name of the columns to return
         String[] projection = {InventoryContract.InventoryFeedEntry.COLUMN_PRODUCT_NAME,
-                InventoryContract.InventoryFeedEntry.COLUMN_QUANTITIY};
+                InventoryContract.InventoryFeedEntry.COLUMN_QUANTITY};
 
         // below string holds conditions to filter the data
         String selection = null;
