@@ -2,4 +2,6 @@
     <string name="app_name">Inventory App</string>
     <!-- String value for showing over the sell button -->
     <string name="sell">Sell (1)</string>
+    <!-- String message which will show when no item to present in the items listView -->
+    <string name="no_items">No items in the store</string>
 </resources>

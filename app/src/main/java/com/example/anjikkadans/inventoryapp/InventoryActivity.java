@@ -1,11 +1,16 @@
 package com.example.anjikkadans.inventoryapp;
 
+import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.CursorLoader;
+import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ListView;
 
 import com.example.anjikkadans.inventoryapp.data.InventoryContract;
 import com.example.anjikkadans.inventoryapp.data.InventoryDBHelper;
@@ -14,7 +19,7 @@ import com.example.anjikkadans.inventoryapp.data.InventoryDBHelper;
  * This class in future may list all the items in the
  * inventory with details
  */
-public class InventoryActivity extends AppCompatActivity {
+public class InventoryActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     // declares the InventoryDBHelper class to access from
     private InventoryDBHelper inventoryDBHelper;
@@ -25,6 +30,21 @@ public class InventoryActivity extends AppCompatActivity {
     // tag name for messages through logs
     private static final String TAG_NAME = InventoryActivity.class.getSimpleName();
 
+    /**
+     * Identifier for the inventory data loader
+     */
+    private static final int INVENTORY_LOADER = 1;
+
+    /**
+     * Adapter for the listView
+     */
+    private InventoryCursorAdapter inventoryCursorAdapter;
+
+    /**
+     * Declaring the ListView to list the items in the inventory database
+     */
+    private ListView listView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,29 +53,23 @@ public class InventoryActivity extends AppCompatActivity {
         // initializes the inventoryDBHelper class
         inventoryDBHelper = new InventoryDBHelper(this);
 
-        // calling insertDummyData
-        insertDummyData();
+        // initializing the items listView
+        listView = (ListView) findViewById(R.id.inventory_list_view);
 
-        // calling fetchData
-        Cursor resultCursor = getData();
+        // initializing empty view which should be shown when list view is empty
+        View emptyView = (View) findViewById(R.id.empty_text_view);
 
-        // String builder for saving pet names
-        StringBuilder nameStringBuilder = new StringBuilder();
+        // hooking the emptyView to the listView
+        listView.setEmptyView(emptyView);
 
-        // column index of pet name in pets table
-        int nameColumnIndex = resultCursor.getColumnIndex(InventoryContract.InventoryFeedEntry.COLUMN_PRODUCT_NAME);
+        // initializing the inventoryCursorAdapter to null
+        inventoryCursorAdapter = new InventoryCursorAdapter(this, null);
 
-        // iterate through all the returned rows
-        while (resultCursor.moveToNext()) {
-            // getting the name of the pet from the current row
-            String petName = resultCursor.getString(nameColumnIndex);
+        // setting the inventoryCursorAdapter to the  inventory listView
+        listView.setAdapter(inventoryCursorAdapter);
 
-            // appending the name with the nameStringBuilder
-            nameStringBuilder.append("\n" + petName);
-        }
-
-        // logging the pet names in the cursor returned
-        Log.v(TAG_NAME, "Cursor returned with " + nameStringBuilder.toString() + " rows");
+        // calling the loader
+        getLoaderManager().initLoader(INVENTORY_LOADER, null, this);
 
     }
 
@@ -134,5 +148,40 @@ public class InventoryActivity extends AppCompatActivity {
         // close the DBHelper class when the activity is
         // destroyed
         inventoryDBHelper.close();
+    }
+
+
+    // Called when a new Loader is to be created
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+        // Projection string array describes the columns which should be
+        // fetched from the query
+        String[] projection = {InventoryContract.InventoryFeedEntry._ID, InventoryContract.InventoryFeedEntry.COLUMN_PRODUCT_NAME,
+                InventoryContract.InventoryFeedEntry.COLUMN_PRICE, InventoryContract.InventoryFeedEntry.COLUMN_SUPPLIER_NAME,
+                InventoryContract.InventoryFeedEntry.COLUMN_SUPPLIER_PHONE_NUMBER};
+
+        // Now create and return a CursorLoader that will take care of
+        // creating a Cursor for the data being displayed
+        return new CursorLoader(this, InventoryContract.InventoryFeedEntry.CONTENT_URI, projection,
+                null, null, null);
+    }
+
+    // Called when a previously created loader has finished loading
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        // Swap the new Cursor in. ( The framework will take care of closing the
+        // old cursor once we return.)
+        inventoryCursorAdapter.swapCursor(data);
+    }
+
+    // called when a previously created loader is reset, making the data unavailable
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        // This is called when the last Cursor provided to onLoadFinished()
+        // above is about to be closed. We need to make sure we are no
+        // longer use it.
+        inventoryCursorAdapter.swapCursor(null);
+
     }
 }
