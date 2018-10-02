@@ -4,4 +4,28 @@
     <string name="sell">Sell (1)</string>
     <!-- String message which will show when no item to present in the items listView -->
     <string name="no_items">No items in the store</string>
+    <!-- Hint to display over item name edit text-->
+    <string name="name">Name</string>
+    <!-- Hint to display over item price edit text-->
+    <string name="price">Price</string>
+    <!-- Hint to display over item quantity edit text-->
+    <string name="quantity">Quantity</string>
+    <!-- Hint to display over item description edit text-->
+    <string name="description">Item Description</string>
+    <!-- String value for showing over add button -->
+    <string name="add">Add</string>
+    <!-- String value for showing over cancel button -->
+    <string name="cancel">Cancel</string>
+    <!-- String value for to display on per text view -->
+    <string name="per">Per</string>
+    <!-- Hint to display over supplier name edit text-->
+    <string name="supplier_name">Supplier Name</string>
+    <!-- Hint to display over supplier phone number edit text-->
+    <string name="supplier_phone_number">Supplier Contact</string>
+    <!-- String value for kilo item type -->
+    <string name="kilo">Kg</string>
+    <!-- String value for count item type -->
+    <string name="count">Piece</string>
+    <!-- String value show over supplier details entry fields -->
+    <string name="supplier_details">supplier details</string>
 </resources>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- These are the options displayed in the item type drop-down spinner -->
+    <array name="array_item_type_options">
+        <item>@string/kilo</item>
+        <item>@string/count</item>
+    </array>
+</resources>

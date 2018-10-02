@@ -79,13 +79,26 @@ public class InventoryContract {
          * Type : INTEGER
          */
         public static final String COLUMN_PRICE = "price";
-
+        /**
+         * Type of the item available at store
+         * <p>
+         * Type : INTEGER
+         */
+        public static final String COLUMN_ITEM_TYPE = "type";
         /**
          * Quantity of the item available at store
          * <p>
          * Type : INTEGER
          */
+
         public static final String COLUMN_QUANTITY = "quantity";
+
+        /**
+         * Shor description of the item
+         * <p>
+         * Type : TEXT
+         */
+        public static final String COLUMN_DESCRIPTION = "description";
 
         /**
          * Name of the supplier
@@ -100,6 +113,12 @@ public class InventoryContract {
          * Type : TEXT
          */
         public static final String COLUMN_SUPPLIER_PHONE_NUMBER = "supplier_phone_number";
+
+        /**
+         * Integer values for storing the item type
+         */
+        public static final int KILO_TYPE = 0;
+        public static final int COUNT_TYPE = 1;
 
     }
 }

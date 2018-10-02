@@ -3,9 +3,11 @@ package com.example.anjikkadans.inventoryapp;
 import android.app.LoaderManager;
 import android.content.ContentValues;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,6 +43,11 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
     private InventoryCursorAdapter inventoryCursorAdapter;
 
     /**
+     * Floating Action Button to add new items
+     */
+    private FloatingActionButton actionButton;
+
+    /**
      * Declaring the ListView to list the items in the inventory database
      */
     private ListView listView;
@@ -70,6 +77,19 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
 
         // calling the loader
         getLoaderManager().initLoader(INVENTORY_LOADER, null, this);
+
+        // initializing action button
+        actionButton = (FloatingActionButton) findViewById(R.id.add_button);
+
+        // adding an action when action button is clicked
+        actionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Intent to Insert a new item to the inventory database
+                Intent newItemIntent = new Intent(InventoryActivity.this, EditInventoryActivity.class);
+                startActivity(newItemIntent);
+            }
+        });
 
     }
 
