@@ -17,7 +17,8 @@
         app:fontFamily="sans-serif-condensed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="WATERMELON" />
+        tools:text="WATERMELON"
+        android:textAllCaps="true"/>
 
     <TextView
         android:id="@+id/itemPriceTextView"

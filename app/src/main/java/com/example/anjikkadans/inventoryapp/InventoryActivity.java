@@ -93,74 +93,6 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
 
     }
 
-    // this function inserts some dummy data to the database
-    // when called
-    private void insertDummyData() {
-
-        // get the writeable type instance of inventory database
-        inventoryDatabase = inventoryDBHelper.getWritableDatabase();
-
-        // fake name for the dummy product
-        String productName = "Dummy Product";
-
-        // fake price for the dummy product
-        int productPrice = 100;
-
-        // fake quanitity for the dummy product
-        int quantity = 2;
-
-        // fake supplier name for the dummy product
-        String supplierName = "Fake Supplier";
-
-        // fake phone number of the supplier
-        String supplierPhoneNumber = "+91 8452******";
-
-        // creates and initializes ContentValues object to
-        // save data to the database
-        ContentValues contentValues = new ContentValues();
-
-        // putting values to the corresponding columns
-        contentValues.put(InventoryContract.InventoryFeedEntry.COLUMN_PRODUCT_NAME, productName);
-        contentValues.put(InventoryContract.InventoryFeedEntry.COLUMN_PRICE, productPrice);
-        contentValues.put(InventoryContract.InventoryFeedEntry.COLUMN_QUANTITY, quantity);
-        contentValues.put(InventoryContract.InventoryFeedEntry.COLUMN_SUPPLIER_NAME, supplierName);
-        contentValues.put(InventoryContract.InventoryFeedEntry.COLUMN_SUPPLIER_PHONE_NUMBER, supplierPhoneNumber);
-
-        // save the content values to the databse
-        long rowId = inventoryDatabase.insert(InventoryContract.InventoryFeedEntry.TABLE_NAME_INVENTORY,
-                null, contentValues);
-
-        Log.v(TAG_NAME, "Dummy data added to inventory table to row " + String.valueOf(rowId));
-
-    }
-
-    // this function queries data from the database
-    // when called
-    private Cursor getData() {
-
-        // get the writeable type instance of inventory database
-        inventoryDatabase = inventoryDBHelper.getWritableDatabase();
-
-        // below string array contains the name of the columns to return
-        String[] projection = {InventoryContract.InventoryFeedEntry.COLUMN_PRODUCT_NAME,
-                InventoryContract.InventoryFeedEntry.COLUMN_QUANTITY};
-
-        // below string holds conditions to filter the data
-        String selection = null;
-
-        // string array contains arguments to the above condition string
-        String[] selectionArgs = null;
-
-        // returns a cursor which holds data returned from the query
-        return inventoryDatabase.query(InventoryContract.InventoryFeedEntry.TABLE_NAME_INVENTORY,
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                null);
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -178,8 +110,7 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
         // Projection string array describes the columns which should be
         // fetched from the query
         String[] projection = {InventoryContract.InventoryFeedEntry._ID, InventoryContract.InventoryFeedEntry.COLUMN_PRODUCT_NAME,
-                InventoryContract.InventoryFeedEntry.COLUMN_PRICE, InventoryContract.InventoryFeedEntry.COLUMN_SUPPLIER_NAME,
-                InventoryContract.InventoryFeedEntry.COLUMN_SUPPLIER_PHONE_NUMBER};
+                InventoryContract.InventoryFeedEntry.COLUMN_PRICE};
 
         // Now create and return a CursorLoader that will take care of
         // creating a Cursor for the data being displayed
@@ -192,7 +123,7 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         // Swap the new Cursor in. ( The framework will take care of closing the
         // old cursor once we return.)
-        inventoryCursorAdapter.swapCursor(data);
+            inventoryCursorAdapter.swapCursor(data);
     }
 
     // called when a previously created loader is reset, making the data unavailable

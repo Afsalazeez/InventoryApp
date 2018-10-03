@@ -14,7 +14,7 @@ public class InventoryDBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "inventory.db";
 
     // private final int for holding the database version number
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 7;
 
 
     public InventoryDBHelper(Context context) {
@@ -29,12 +29,12 @@ public class InventoryDBHelper extends SQLiteOpenHelper {
                 "CREATE TABLE " + InventoryContract.InventoryFeedEntry.TABLE_NAME_INVENTORY + "("
                         + InventoryContract.InventoryFeedEntry._ID + " INTEGER PRIMARY KEY, "
                         + InventoryContract.InventoryFeedEntry.COLUMN_PRODUCT_NAME + " TEXT NOT NULL, "
-                        + InventoryContract.InventoryFeedEntry.COLUMN_PRICE + " INTEGER NOT NULL, "
+                        + InventoryContract.InventoryFeedEntry.COLUMN_PRICE + " INT NOT NULL, "
                         + InventoryContract.InventoryFeedEntry.COLUMN_QUANTITY + " INT NOT NULL, "
-                        + InventoryContract.InventoryFeedEntry.COLUMN_DESCRIPTION + "TEXT NOT NULL,"
-                        + InventoryContract.InventoryFeedEntry.COLUMN_ITEM_TYPE + "INT NOT NULL,"
+                        + InventoryContract.InventoryFeedEntry.COLUMN_ITEM_TYPE + " INT NOT NULL,"
                         + InventoryContract.InventoryFeedEntry.COLUMN_SUPPLIER_NAME + " TEXT , "
-                        + InventoryContract.InventoryFeedEntry.COLUMN_SUPPLIER_PHONE_NUMBER + " TEXT "
+                        + InventoryContract.InventoryFeedEntry.COLUMN_SUPPLIER_PHONE_NUMBER + " TEXT NOT NULL, "
+                        + InventoryContract.InventoryFeedEntry.COLUMN_DESCRIPTION + " TEXT NOT NULL "
                         + ");";
 
         // creates the inventory_table when the database is first created

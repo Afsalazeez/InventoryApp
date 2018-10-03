@@ -124,7 +124,7 @@ public class InventoryProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Cannot query unknown URI " + uri);
         }
-        return null;
+        return cursor;
     }
 
     @Nullable

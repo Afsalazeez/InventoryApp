@@ -18,7 +18,11 @@
         </activity>
         <activity
             android:name=".EditInventoryActivity"
-            android:label="Add an Item"></activity>
+            android:label="Add an Item" android:parentActivityName=".InventoryActivity"></activity>
+        <provider
+            android:name=".data.InventoryProvider"
+            android:authorities="com.example.android.inventory"
+            android:exported="false" />
     </application>
 
 </manifest>

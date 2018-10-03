@@ -65,7 +65,7 @@ public class InventoryCursorAdapter extends CursorAdapter {
 
         // Read the item attributes from the cursor for the current item
         String itemName = cursor.getString(nameColumnIndex);
-        String itemPrice = String.valueOf(cursor.getInt(priceColumnIndex));
+        String itemPrice = String.valueOf(cursor.getInt(priceColumnIndex)) + " $";
 
         // Update the with attributes for the current item
         itemNameTextView.setText(itemName);
