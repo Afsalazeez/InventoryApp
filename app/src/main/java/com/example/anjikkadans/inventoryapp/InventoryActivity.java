@@ -1,18 +1,28 @@
 package com.example.anjikkadans.inventoryapp;
 
 import android.app.LoaderManager;
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.anjikkadans.inventoryapp.data.InventoryContract;
 import com.example.anjikkadans.inventoryapp.data.InventoryDBHelper;
@@ -63,6 +73,28 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
         // initializing the items listView
         listView = (ListView) findViewById(R.id.inventory_list_view);
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+
+                // creates an intent to go to {@link EditInventoryActivity}
+                Intent EditInventoryIntent = new Intent(InventoryActivity.this, EditInventoryActivity.class);
+
+                // from the CONTENT_URI that represents the specific item that was clicked on,
+                // by appending the "id" ( passed as input to this method ) onto the
+                // {@link InventoryFeedEntry#CONTENT_URI}
+                Uri dataUri = ContentUris.withAppendedId(InventoryContract.InventoryFeedEntry.CONTENT_URI, l);
+
+                // set the URI on the data field of the intent
+                EditInventoryIntent.setData(dataUri);
+
+                // Launch the (@link EditInventoryActivity} to display the data for the current item
+                startActivity(EditInventoryIntent);
+            }
+        });
+
+
         // initializing empty view which should be shown when list view is empty
         View emptyView = (View) findViewById(R.id.empty_text_view);
 
@@ -110,7 +142,8 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
         // Projection string array describes the columns which should be
         // fetched from the query
         String[] projection = {InventoryContract.InventoryFeedEntry._ID, InventoryContract.InventoryFeedEntry.COLUMN_PRODUCT_NAME,
-                InventoryContract.InventoryFeedEntry.COLUMN_PRICE};
+                InventoryContract.InventoryFeedEntry.COLUMN_PRICE, InventoryContract.InventoryFeedEntry.COLUMN_ITEM_TYPE,
+                InventoryContract.InventoryFeedEntry.COLUMN_QUANTITY};
 
         // Now create and return a CursorLoader that will take care of
         // creating a Cursor for the data being displayed
@@ -123,7 +156,7 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         // Swap the new Cursor in. ( The framework will take care of closing the
         // old cursor once we return.)
-            inventoryCursorAdapter.swapCursor(data);
+        inventoryCursorAdapter.swapCursor(data);
     }
 
     // called when a previously created loader is reset, making the data unavailable
@@ -133,6 +166,33 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
         // above is about to be closed. We need to make sure we are no
         // longer use it.
         inventoryCursorAdapter.swapCursor(null);
+
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_delete_all:
+                deleteAllItems();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Helper method to delete all items in the database
+     */
+    public void deleteAllItems() {
+
+        int rowsDeleted = getContentResolver().delete(InventoryContract.InventoryFeedEntry.CONTENT_URI,
+                null, null);
 
     }
 }

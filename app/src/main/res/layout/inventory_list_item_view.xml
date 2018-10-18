@@ -3,30 +3,31 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants">
 
     <TextView
         android:id="@+id/itemNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="23dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
+        android:textAllCaps="true"
         android:textColor="@android:color/black"
         android:textSize="18sp"
         app:fontFamily="sans-serif-condensed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="WATERMELON"
-        android:textAllCaps="true"/>
+        tools:text="WATERMELON" />
 
     <TextView
-        android:id="@+id/itemPriceTextView"
+        android:id="@+id/item_price_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="12dp"
         android:textColor="@android:color/black"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,12 +38,23 @@
     <Button
         android:id="@+id/sellButton"
         android:layout_width="119dp"
-        android:layout_height="42dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="36dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="44dp"
         android:text="@string/sell"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="SELL (1)" />
+
+    <TextView
+        android:id="@+id/item_quantity_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="@+id/item_price_text_view"
+        app:layout_constraintEnd_toStartOf="@+id/sellButton" />
+
 </android.support.constraint.ConstraintLayout>

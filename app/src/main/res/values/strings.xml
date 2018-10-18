@@ -13,7 +13,7 @@
     <!-- Hint to display over item description edit text-->
     <string name="description">Item Description</string>
     <!-- String value for showing over add button -->
-    <string name="add">Add</string>
+    <string name="save">Save</string>
     <!-- String value for showing over cancel button -->
     <string name="cancel">Cancel</string>
     <!-- String value for to display on per text view -->
@@ -28,4 +28,10 @@
     <string name="count">Piece</string>
     <!-- String value show over supplier details entry fields -->
     <string name="supplier_details">supplier details</string>
+    <string name="discard">Discard</string>
+    <string name="keep_editing">Keep editing</string>
+    <string name="unsaved_changes_dialog_msg">Discard your changes and quit editing?</string>
+    <string name="delete">DELETE</string>
+    <string name="delete_dialog_msg">Delete this item</string>
+    <string name="clear_market">Clear market</string>
 </resources>

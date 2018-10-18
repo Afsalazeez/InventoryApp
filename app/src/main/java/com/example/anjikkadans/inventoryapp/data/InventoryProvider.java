@@ -88,7 +88,7 @@ public class InventoryProvider extends ContentProvider {
         SQLiteDatabase database = inventoryDBHelper.getReadableDatabase();
 
         // This cursor will hold the result of the query
-        Cursor cursor;
+        Cursor cursor = null;
 
         // Figure out if the URI matcher can match the URI to a specific code
         int match = sUriMatcher.match(uri);
@@ -212,11 +212,11 @@ public class InventoryProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-        // Get wite able database
+        // Get write able database
         SQLiteDatabase database = inventoryDBHelper.getWritableDatabase();
 
         // Track the number of rows that were deleted
-        int rowsDeleted;
+        int rowsDeleted = 0;
 
         final int match = sUriMatcher.match(uri);
         switch (match) {
@@ -228,6 +228,7 @@ public class InventoryProvider extends ContentProvider {
                 // Delete a single row given by the ID in the URI
                 selection = InventoryContract.InventoryFeedEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                // get the number of rows deleted
                 rowsDeleted = database.delete(InventoryContract.InventoryFeedEntry.TABLE_NAME_INVENTORY, selection, selectionArgs);
                 break;
             default:
@@ -237,6 +238,7 @@ public class InventoryProvider extends ContentProvider {
         // If 1 or more rows were deleted, then notify all the listeners the data of the
         // given URI has changed
         if (rowsDeleted != 0) {
+
             getContext().getContentResolver().notifyChange(uri, null);
         }
         return rowsDeleted;

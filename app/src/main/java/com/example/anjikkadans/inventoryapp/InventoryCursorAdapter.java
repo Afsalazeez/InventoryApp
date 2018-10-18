@@ -1,10 +1,15 @@
 package com.example.anjikkadans.inventoryapp;
 
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
+import android.provider.BaseColumns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
@@ -17,6 +22,9 @@ import com.example.anjikkadans.inventoryapp.data.InventoryContract;
  */
 public class InventoryCursorAdapter extends CursorAdapter {
 
+
+    private final Context mContext;
+
     /**
      * Constructs a new {@link InventoryCursorAdapter}.
      *
@@ -24,7 +32,9 @@ public class InventoryCursorAdapter extends CursorAdapter {
      * @param c       The cursor from which to get the data.
      */
     public InventoryCursorAdapter(Context context, Cursor c) {
+
         super(context, c, 0);
+        mContext = context;
     }
 
     /**
@@ -53,22 +63,57 @@ public class InventoryCursorAdapter extends CursorAdapter {
      *                correct row
      */
     @Override
-    public void bindView(View view, Context context, Cursor cursor) {
+    public void bindView(View view, final Context context, Cursor cursor) {
 
         // Find individual views that we want to modify in the list item layout
         TextView itemNameTextView = (TextView) view.findViewById(R.id.itemNameTextView);
-        TextView priceTextView = (TextView) view.findViewById(R.id.itemPriceTextView);
+        TextView priceTextView = (TextView) view.findViewById(R.id.item_price_text_view);
+        TextView itemQuantityTextView = (TextView) view.findViewById(R.id.item_quantity_text_view);
+        Button sellButton = (Button) view.findViewById(R.id.sellButton);
 
         // Find the columns of item attributes that we're interested in
+        int itemIdIndex = cursor.getColumnIndex(InventoryContract.InventoryFeedEntry._ID);
         int nameColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryFeedEntry.COLUMN_PRODUCT_NAME);
         int priceColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryFeedEntry.COLUMN_PRICE);
+        int itemTypeColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryFeedEntry.COLUMN_ITEM_TYPE);
+        int itemQuantityColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryFeedEntry.COLUMN_QUANTITY);
 
         // Read the item attributes from the cursor for the current item
-        String itemName = cursor.getString(nameColumnIndex);
-        String itemPrice = String.valueOf(cursor.getInt(priceColumnIndex)) + " $";
+        final int itemId = cursor.getInt(itemIdIndex);
+        final String itemName = cursor.getString(nameColumnIndex);
+        final String itemPrice = String.valueOf(cursor.getInt(priceColumnIndex)) + " $";
+        final int itemType = cursor.getInt(itemTypeColumnIndex);
+        final int itemQuantity = cursor.getInt(itemQuantityColumnIndex);
 
         // Update the with attributes for the current item
         itemNameTextView.setText(itemName);
         priceTextView.setText(itemPrice);
+
+        // initializing a String value to paste the display the quantity message
+        String display = "";
+
+        // checks if the item is sold per kilogram or per pieces
+        if (itemType == InventoryContract.InventoryFeedEntry.KILO_TYPE) {
+
+            display = String.valueOf(itemQuantity) + " Kg left";
+        } else {
+            display = String.valueOf(itemQuantity) + " Pieces left";
+        }
+        // printing the display value to {@link itemQuantityTextView}
+        itemQuantityTextView.setText(display);
+
+        sellButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (itemQuantity > 0) {
+
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put(InventoryContract.InventoryFeedEntry.COLUMN_QUANTITY, itemQuantity - 1);
+                    Uri uri = ContentUris.withAppendedId(InventoryContract.InventoryFeedEntry.CONTENT_URI, itemId);
+                    mContext.getContentResolver().update(uri, contentValues, null, null);
+                }
+            }
+        });
     }
 }
