@@ -154,6 +154,8 @@ public class EditInventoryActivity extends AppCompatActivity implements LoaderMa
             }
         });
 
+        // When the cancel button is clicked do not save anything
+        // Just let things like it before and go back to the {@link InventoryActivity}
         mCancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -268,7 +270,8 @@ public class EditInventoryActivity extends AppCompatActivity implements LoaderMa
         contentValues.put(InventoryContract.InventoryFeedEntry.COLUMN_SUPPLIER_NAME, supplierName);
         contentValues.put(InventoryContract.InventoryFeedEntry.COLUMN_SUPPLIER_PHONE_NUMBER, supplierPhoneNumber);
 
-
+        // Check if we user is updating an existing item or adding a new item
+        // before saving new data
         if (mCurrentItemUri == null) {
 
             try {
@@ -316,30 +319,35 @@ public class EditInventoryActivity extends AppCompatActivity implements LoaderMa
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
-        if (data == null) {
-            Toast.makeText(EditInventoryActivity.this, "Toast", Toast.LENGTH_SHORT).show();
+
+        // Bail early if the cursor is null or there is less than 1 row in the cursor
+        if (data == null || data.getCount() < 1) {
+            return;
+        }
+        // Proceed with moving to the first row of the cursor and reading data from it
+        // (This should be the only row in the cursor)
+        if (data.moveToFirst()) {
+
+            // getting data from the cursor
+            String itemName = data.getString(data.getColumnIndex(InventoryContract.InventoryFeedEntry.COLUMN_PRODUCT_NAME));
+            int itemPrice = data.getInt(data.getColumnIndex(InventoryContract.InventoryFeedEntry.COLUMN_PRICE));
+            int itemQuantity = data.getInt(data.getColumnIndex(InventoryContract.InventoryFeedEntry.COLUMN_QUANTITY));
+            String supplierName = data.getString(data.getColumnIndex(InventoryContract.InventoryFeedEntry.COLUMN_SUPPLIER_NAME));
+            String supplierContact = data.getString(data.getColumnIndex(InventoryContract.InventoryFeedEntry.COLUMN_SUPPLIER_PHONE_NUMBER));
+            int itemType = data.getInt(data.getColumnIndex(InventoryContract.InventoryFeedEntry.COLUMN_ITEM_TYPE));
+            String description = data.getString(data.getColumnIndex(InventoryContract.InventoryFeedEntry.COLUMN_DESCRIPTION));
+
+            // filling the input view with the data from the cursor
+            mItemNameEditText.setText(itemName);
+            mItemPriceEditText.setText(String.valueOf(itemPrice));
+            mItemQuantityEditText.setText(String.valueOf(itemQuantity));
+            mSupplierName.setText(supplierName);
+            mSupplierContact.setText(supplierContact);
+            mItemTypeSpinner.setId(itemType);
+            mItemDescriptionEditText.setText(description);
         }
 
-        // move the cursor pointer to the first result
-        data.moveToFirst();
 
-        // getting data from the cursor
-        String itemName = data.getString(data.getColumnIndex(InventoryContract.InventoryFeedEntry.COLUMN_PRODUCT_NAME));
-        int itemPrice = data.getInt(data.getColumnIndex(InventoryContract.InventoryFeedEntry.COLUMN_PRICE));
-        int itemQuantity = data.getInt(data.getColumnIndex(InventoryContract.InventoryFeedEntry.COLUMN_QUANTITY));
-        String supplierName = data.getString(data.getColumnIndex(InventoryContract.InventoryFeedEntry.COLUMN_SUPPLIER_NAME));
-        String supplierContact = data.getString(data.getColumnIndex(InventoryContract.InventoryFeedEntry.COLUMN_SUPPLIER_PHONE_NUMBER));
-        int itemType = data.getInt(data.getColumnIndex(InventoryContract.InventoryFeedEntry.COLUMN_ITEM_TYPE));
-        String description = data.getString(data.getColumnIndex(InventoryContract.InventoryFeedEntry.COLUMN_DESCRIPTION));
-
-        // filling the input view with the data from the cursor
-        mItemNameEditText.setText(itemName);
-        mItemPriceEditText.setText(String.valueOf(itemPrice));
-        mItemQuantityEditText.setText(String.valueOf(itemQuantity));
-        mSupplierName.setText(supplierName);
-        mSupplierContact.setText(supplierContact);
-        mItemTypeSpinner.setId(itemType);
-        mItemDescriptionEditText.setText(description);
     }
 
     @Override
@@ -510,6 +518,7 @@ public class EditInventoryActivity extends AppCompatActivity implements LoaderMa
         return true;
     }
 
+    // This method reduce the the quantity of the item by unit measure
     public void decreaseQuantity(View view) {
 
         String quantityString = mItemQuantityEditText.getText().toString();
@@ -525,6 +534,7 @@ public class EditInventoryActivity extends AppCompatActivity implements LoaderMa
 
     }
 
+    // This method increases the quantity of the item by unit measure
     public void increaseQuantity(View view) {
 
         String quantityString = mItemQuantityEditText.getText().toString();
@@ -538,8 +548,11 @@ public class EditInventoryActivity extends AppCompatActivity implements LoaderMa
         }
     }
 
+    // This method starts an Intent to the phone Activity when the
+    // and called when the phone icon is clicked while revisiting an item
     public void startPhoneIntent(View view) {
 
+        // Checks if it is a new item, so we don't have to call the intent
         if (mCurrentItemUri == null) {
             return;
         }
@@ -550,6 +563,8 @@ public class EditInventoryActivity extends AppCompatActivity implements LoaderMa
 
         phoneIntent.setData(Uri.parse("tel:" + phoneNumber));
 
+        // Checking if the user has any activity to catch this intent before
+        // crashing
         if (phoneIntent.resolveActivity(getPackageManager()) != null) {
             startActivity(phoneIntent);
         }
@@ -575,10 +590,14 @@ public class EditInventoryActivity extends AppCompatActivity implements LoaderMa
             }
 
         } else {
+            // starts the activity
             startActivity(phoneIntent);
         }
     }
 
+    // After devices from API 23 we need to check the permissions are granted each time we call
+    // any service which needs user authorization. Here we look the results after checking
+    // the permissions we need
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
